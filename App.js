@@ -1,32 +1,54 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Text,
+} from 'react-native';
 import SideBar from './app/components/SideBar';
 import MeditationScreen from './app/screens/MeditationScreen';
 
-// FileSystem.deleteAsync(DB_DIR);
-
 export default function App() {
-  // 'r' Twice to reload the android studio
-
   const [started, setStarted] = useState(false);
+  const [meditationTime, setMeditationTime] = useState(5);
+
+  const [configOpened, setConfigOpened] = useState('none');
 
   return (
-    <View style={styles.container}>
-      <SideBar />
-      {!started && <Button onPress={() => setStarted(true)} title='Start' />}
-      {started && <MeditationScreen />}
-
+    <SafeAreaView style={styles.mainContainer}>
+      <SideBar style={styles.sidebar}>
+        <TouchableOpacity onPress={() => setConfigOpened('time')}>
+          <Text>Change meditation time</Text>
+          <Modal visible={configOpened === 'time'}>
+            <Text>New meditation time: </Text>
+            <TextInput></TextInput>
+          </Modal>
+        </TouchableOpacity>
+      </SideBar>
+      <View style={styles.appContainer}>
+        {!started && <Button onPress={() => setStarted(true)} title='Start' />}
+        {started && <MeditationScreen meditationTime={meditationTime} />}
+      </View>
       <StatusBar style='auto' />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: { flex: 1, backgroundColor: '#fff' },
+  appContainer: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  sidebar: {
+    marginTop: 30,
+    marginLeft: 10,
+    position: 'absolute',
   },
 });
