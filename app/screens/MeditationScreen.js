@@ -72,7 +72,7 @@ function CSVToArray(strData, strDelimiter) {
   return arrData;
 }
 
-const MeditationScreen = () => {
+const MeditationScreen = ({ meditationTime }) => {
   const [finished, setFinished] = useState(false);
 
   const setMeditations = async (date, time) => {
@@ -127,7 +127,11 @@ const MeditationScreen = () => {
     setMeditations(completeDate, totalTime);
   };
 
-  return <View>{!finished && <Timer onFinish={handleTimerFinish} from={5} />}</View>;
+  return (
+    <View>
+      {!finished && <Timer onFinish={handleTimerFinish} from={meditationTime} />}
+    </View>
+  );
 };
 
 export default MeditationScreen;
