@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Animated, View, StyleSheet } from 'react-native';
+import { Animated, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Octicons } from '@expo/vector-icons';
 
-const SideBar = ({ children, style }) => {
+const SideBar = ({ style, navigation }) => {
   const [barStatus, setBarStatus] = useState({
     expanded: false,
     animating: false,
@@ -49,7 +49,9 @@ const SideBar = ({ children, style }) => {
             (styles.contentContainer, { transform: [{ translateX: translateAnim }] })
           }
         >
-          {children}
+          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+            <Text>Settings</Text>
+          </TouchableOpacity>
         </Animated.View>
       )}
     </View>
@@ -61,6 +63,7 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     color: 'black',
+    marginTop: 30,
   },
   contentContainer: {},
 });

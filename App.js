@@ -1,41 +1,46 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import {
-  Button,
-  StyleSheet,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  Text,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SideBar from './app/components/SideBar';
 import MeditationScreen from './app/screens/MeditationScreen';
+import SettingsScreen from './app/screens/SettingsScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [started, setStarted] = useState(false);
+  // const [screen, setScreen] = useState({ name: 'Start menu' });
+
   const [meditationTime, setMeditationTime] = useState(5);
 
-  const [configOpened, setConfigOpened] = useState('none');
+  const handleTimeChange = ({ minutes, seconds }) => {
+    const minutesToSecond = minutes <= 0 ? minutes : minutes * 60;
+
+    setMeditationTime(minutesToSecond + seconds);
+  };
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <SideBar style={styles.sidebar}>
-        <TouchableOpacity onPress={() => setConfigOpened('time')}>
-          <Text>Change meditation time</Text>
-          <Modal visible={configOpened === 'time'}>
-            <Text>New meditation time: </Text>
-            <TextInput></TextInput>
-          </Modal>
-        </TouchableOpacity>
-      </SideBar>
-      <View style={styles.appContainer}>
-        {!started && <Button onPress={() => setStarted(true)} title='Start' />}
-        {started && <MeditationScreen meditationTime={meditationTime} />}
-      </View>
-      <StatusBar style='auto' />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          header: SideBar,
+        }}
+      >
+        <Stack.Screen
+          name='Home'
+          component={MeditationScreen}
+          options={{ title: 'Home' }}
+          initialParams={{ meditationTime }}
+        />
+
+        <Stack.Screen
+          name='Settings'
+          component={SettingsScreen}
+          options={{ title: 'Settings' }}
+          initialParams={{ handleTimeChange }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

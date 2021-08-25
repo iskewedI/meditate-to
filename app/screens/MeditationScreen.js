@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { Button, SafeAreaView } from 'react-native';
 import Timer from '../components/Timer';
 import * as FileSystem from 'expo-file-system';
 
@@ -73,8 +73,6 @@ function CSVToArray(strData, strDelimiter) {
 }
 
 const MeditationScreen = ({ meditationTime }) => {
-  const [finished, setFinished] = useState(false);
-
   const setMeditations = async (date, time) => {
     try {
       console.log('Setting meditations');
@@ -118,8 +116,6 @@ const MeditationScreen = ({ meditationTime }) => {
   };
 
   const handleTimerFinish = totalTime => {
-    setFinished(true);
-
     const date = new Date();
 
     const completeDate = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`;
@@ -128,9 +124,9 @@ const MeditationScreen = ({ meditationTime }) => {
   };
 
   return (
-    <View>
-      {!finished && <Timer onFinish={handleTimerFinish} from={meditationTime} />}
-    </View>
+    <SafeAreaView>
+      <Timer onFinish={handleTimerFinish} from={meditationTime} />
+    </SafeAreaView>
   );
 };
 
